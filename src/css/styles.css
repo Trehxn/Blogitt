@@ -1,6 +1,7 @@
 :root {
-    --color-primary-light: rgb(235, 227, 227);
-    --color-primary-dark: rgb(0, 0, 0);
+    --color-white: #fff;
+    --color-primary-light: #f5dbdb;
+    --color-primary-blue: #1976D2;
     --color-primary-accent: rgb(31, 30, 30);
 }
 
@@ -13,7 +14,6 @@
 
 body{
     box-sizing: border-box;
-    font-family: "Ubuntu", sans-serif;
     text-align: center;
     color: var(--color-primary-light);
     min-width: 21rem;
@@ -24,19 +24,9 @@ a, a::before {
     color: var(--color-primary-light);
 }
 
-.header {
-    background-color: var(--color-primary-dark);
-    padding: 1.3rem 0;
-    margin: 0 auto;
-}
-
-.header a{
-    margin: 0 2rem;
-}
-
-.container--accent {
-    background-color: var(--color-primary-accent);
-}
+/* .container--accent {
+    background-color: var(--color-primary-light);
+} */
 
 .thin {
     padding: 5rem 0;
@@ -63,21 +53,28 @@ h1, h2, h3{
 }
 
 .post {
-    font-size: 14px;
     padding: 1rem 1.5rem;
     text-align: left;
     margin: 0 auto;
     width: 50%;
     border-radius: 10px;
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-blue);
+}
+
+.post:last-child {
+    margin-bottom: 2rem;
 }
 
 .post:not(:last-child) {
     margin-bottom: 1rem;
 }
 
+.username{
+    width: fit-content;
+}
+
 .username:hover {
-    color: blue;
+    color: purple;
     cursor: pointer;
 }
 
@@ -100,3 +97,5 @@ h1, h2, h3{
 .inputs {
   margin-bottom: 1rem;  
 }
+
+

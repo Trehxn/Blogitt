@@ -1,9 +1,17 @@
+import Typography from "@mui/material/Typography";
+
 const Landing = () => {
   return (
-    <div className="container--accent thick">
-      <h1>NULL Innovation</h1>
-      <h2>Pre-Interview Task</h2>
-    </div>
+    <Typography
+      variant="h4"
+      component="div"
+      sx={{ flexGrow: 1, color: "#144372" }}
+    >
+      <div className="thick">
+        <h1>Blogitt</h1>
+        <h4>where all the blogs are litt..</h4>
+      </div>
+    </Typography>
   );
 };
 

@@ -8,8 +8,6 @@ const Author = () => {
     url: `/users/${id}`,
   });
 
-  console.log(data);
-
   return (
     <div className="author container--accent thin">
       <div className="post">

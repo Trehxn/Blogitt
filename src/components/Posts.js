@@ -5,6 +5,7 @@ import map from "lodash/map";
 
 import useAxios from "../hooks/useAxios";
 import { Link, useNavigate } from "react-router-dom";
+import requireAuth from "../hoc/requireAuth";
 
 const getCombinedData = (posts, users) => {
   return posts.map((post) => {
@@ -22,11 +23,7 @@ const Posts = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const {
-    data: posts,
-    loading,
-    fetched,
-  } = useAxios({
+  const { data: posts } = useAxios({
     url: "/posts?_start=0&_limit=10",
   });
 
@@ -53,24 +50,20 @@ const Posts = () => {
     };
   }, [search, posts, users]);
 
-  // console.log(computedData);
-  // console.log({ users: users, posts: data });
-
-  console.log();
-
   return (
     <div className="container--accent posts">
       <Box
         component="form"
         sx={{
-          "& > :not(style)": { m: 1, width: "25ch" },
+          "& > :not(style)": { m: 1, width: "52%" },
+          marginBlock: "2rem",
         }}
         noValidate
         autoComplete="off"
       >
         <TextField
           id="outlined-basic"
-          label="Search"
+          label="Search keyword"
           variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -78,7 +71,7 @@ const Posts = () => {
       </Box>
       {map(search ? computedData : getCombinedData(posts, users), (d) => {
         return (
-          <div className="post">
+          <div key={d.id} className="post">
             <div className="content">
               <h3>{d.title}</h3>
               <div>{d.body}</div>
@@ -86,7 +79,7 @@ const Posts = () => {
             <div
               className="username"
               onClick={() => {
-                // navigate(`/author/${user.id}`);
+                navigate(`/author/${d.userId}`);
               }}
             >
               -{d.username}
@@ -98,4 +91,4 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default requireAuth(Posts);
