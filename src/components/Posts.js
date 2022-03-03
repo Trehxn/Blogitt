@@ -37,9 +37,9 @@ const Posts = () => {
         setComputedData(
           getCombinedData(posts, users).filter(
             (item) =>
-              item.title.includes(search) ||
-              item.body.includes(search) ||
-              item.username.includes(search)
+              item.title.toLowerCase().includes(search.toLowerCase()) ||
+              item.body.toLowerCase().includes(search.toLowerCase()) ||
+              item.username.toLowerCase().includes(search.toLowerCase())
           )
         );
       }
@@ -63,7 +63,7 @@ const Posts = () => {
       >
         <TextField
           id="outlined-basic"
-          label="Search keyword"
+          label="Search posts"
           variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -91,4 +91,4 @@ const Posts = () => {
   );
 };
 
-export default requireAuth(Posts);
+export default Posts;

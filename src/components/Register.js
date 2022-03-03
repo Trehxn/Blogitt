@@ -1,46 +1,57 @@
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const SignInPage = () => {
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .min(5)
+      .matches(/^[a-z0-9]+$/i, "Must contain alphanumeric characters")
+      .required(),
+  })
+  .required();
+
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyAGliy2hNBe1_ePZhQVvog5osVuSNrq1L4",
+  authDomain: "null-innovation-bb909.firebaseapp.com",
+  projectId: "null-innovation-bb909",
+  storageBucket: "null-innovation-bb909.appspot.com",
+  messagingSenderId: "268341681787",
+  appId: "1:268341681787:web:dace7cdaaa6c6deecfccde",
+});
+
+const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const dispatch = useDispatch();
+  } = useForm({ resolver: yupResolver(schema) });
   const navigate = useNavigate();
 
-  console.log(errors);
-
   return (
-    <div className="thin">
+    <div className="sign-in container--accent thin">
       <form
         onSubmit={handleSubmit((data) => {
-          dispatch({ type: "SIGN_IN_START" });
           const auth = getAuth();
-          signInWithEmailAndPassword(auth, data.email, data.password)
+          createUserWithEmailAndPassword(auth, data.email, data.password)
             .then((userCredential) => {
               const user = userCredential.user;
-              navigate("/");
-              dispatch({
-                type: "SIGN_IN_SUCCESS",
-                payload: user,
-              });
+              console.log(user);
+              navigate("/login");
             })
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
               console.log({ code: errorCode, message: errorMessage });
-              dispatch({
-                type: "SIGN_IN_ERROR",
-                payload: errorMessage,
-              });
             });
         })}
       >
@@ -49,7 +60,7 @@ const SignInPage = () => {
           component="div"
           sx={{ flexGrow: 1, color: "#144372" }}
         >
-          Sign In
+          Register
         </Typography>
         <Box
           sx={{
@@ -63,8 +74,10 @@ const SignInPage = () => {
             id="outlined-basic"
             label="Email"
             variant="outlined"
-            {...register("email", { required: true, minLength: 10 })}
+            {...register("email", { required: true })}
             autoComplete="off"
+            error={errors.email ? true : false}
+            helperText={errors.email?.message}
           />
         </Box>
         <Box
@@ -82,6 +95,8 @@ const SignInPage = () => {
             variant="outlined"
             {...register("password", { required: true })}
             autoComplete="off"
+            error={errors.password ? true : false}
+            helperText={errors.password?.message}
           />
         </Box>
         <Button type="submit" variant="contained" className="btn">
@@ -92,4 +107,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default Register;

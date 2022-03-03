@@ -9,7 +9,7 @@ const Landing = () => {
     >
       <div className="thick">
         <h1>Blogitt</h1>
-        <h4>where all the blogs are litt..</h4>
+        <h6>where all the blogs are litt..</h6>
       </div>
     </Typography>
   );

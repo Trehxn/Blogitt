@@ -44,6 +44,10 @@ h1, h2, h3{
     padding: 1rem 0;
 }
 
+.posts::-webkit-scrollbar {
+    display: none;
+}
+
 .posts .content {
     margin-bottom: 1rem;
 }
@@ -98,4 +102,12 @@ h1, h2, h3{
   margin-bottom: 1rem;  
 }
 
+
+.loader{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 

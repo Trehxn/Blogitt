@@ -13,7 +13,7 @@ function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{ padding: ".8rem 0" }}>
+        <Toolbar sx={{ padding: ".4rem 0" }}>
           <Typography
             variant="h5"
             component="div"
@@ -50,19 +50,19 @@ function Header() {
                   }}
                   color="inherit"
                 >
-                  Sign-Out
+                  Signout
                 </Button>
               </>
             ) : (
               <>
-                <a href="/signup">
+                <a href="/register">
                   <Button sx={{ marginInline: "1rem" }} color="inherit">
-                    Sign-Up
+                    Register
                   </Button>
                 </a>
-                <a href="/signin">
+                <a href="/login">
                   <Button sx={{ marginInline: "1rem" }} color="inherit">
-                    Sign-In
+                    Login
                   </Button>
                 </a>
               </>

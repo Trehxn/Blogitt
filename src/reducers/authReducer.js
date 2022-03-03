@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
   loading: false,
+  isFetched: false,
   error: null,
   user: null,
 };
@@ -10,6 +11,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: true,
+        isFetched: false,
         error: null,
         user: null,
       };
@@ -17,6 +19,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        isFetched: true,
         error: null,
         user: action.payload,
       };
@@ -24,12 +27,14 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload,
+        isFetched: true,
         loading: false,
         user: null,
       };
     case "SIGN_OUT":
       return {
         ...state,
+        isFetched: true,
         loading: false,
         error: null,
         user: null,
@@ -37,6 +42,7 @@ export default (state = INITIAL_STATE, action) => {
     case "NO_USER_FOUND":
       return {
         ...state,
+        isFetched: true,
         loading: false,
         error: null,
       };
