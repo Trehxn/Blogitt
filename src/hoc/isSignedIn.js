@@ -11,10 +11,11 @@ const requireAuth = (Component) => {
 
     useEffect(() => {
       if (!auth.isFetched) return null;
-      if (!auth.user) navigate("/login");
+
+      if (auth.user) navigate("/");
     }, [auth]);
 
-    if (auth.isFetched && auth.user) {
+    if (auth.isFetched && !auth.user) {
       return <Component {...rest} />;
     } else {
       return null;

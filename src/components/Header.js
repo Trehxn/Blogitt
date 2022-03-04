@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 function Header() {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -19,7 +20,7 @@ function Header() {
             component="div"
             sx={{ flexGrow: 1, textAlign: "left", paddingLeft: "3rem" }}
           >
-            <a href="/">Blogitt</a>
+            <Link to="/">Blogitt</Link>
           </Typography>
           <Typography
             variant="h6"
@@ -28,11 +29,11 @@ function Header() {
           >
             {user ? (
               <>
-                <a href="/posts">
+                <Link to="/posts">
                   <Button sx={{ marginInline: "1rem" }} color="inherit">
                     Posts
                   </Button>
-                </a>
+                </Link>
                 <Button
                   sx={{ marginInline: "1rem" }}
                   onClick={() => {
@@ -41,6 +42,7 @@ function Header() {
                       .then(() => {
                         dispatch({ type: "SIGN_OUT" });
                         console.log("Signed out");
+                        navigate("/");
                       })
                       .catch((error) => {
                         const errorCode = error.code;
@@ -55,16 +57,16 @@ function Header() {
               </>
             ) : (
               <>
-                <a href="/register">
+                <Link to="/register">
                   <Button sx={{ marginInline: "1rem" }} color="inherit">
                     Register
                   </Button>
-                </a>
-                <a href="/login">
+                </Link>
+                <Link to="/login">
                   <Button sx={{ marginInline: "1rem" }} color="inherit">
                     Login
                   </Button>
-                </a>
+                </Link>
               </>
             )}
           </Typography>

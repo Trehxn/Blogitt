@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import map from "lodash/map";
 
 import useAxios from "../hooks/useAxios";
-import { Link, useNavigate } from "react-router-dom";
 import requireAuth from "../hoc/requireAuth";
+import Modal from "./Modal";
+import Author from "./Author";
+import { CircularProgress } from "@mui/material";
 
 const getCombinedData = (posts, users) => {
   return posts.map((post) => {
@@ -13,21 +18,22 @@ const getCombinedData = (posts, users) => {
     const foundUser = users.find((user) => user.id === userId);
     return {
       ...post,
-      username: foundUser?.username,
+      user: foundUser,
     };
   });
 };
 
 const Posts = () => {
+  const [selectedPost, setSelectedPost] = useState(null);
   const [computedData, setComputedData] = useState([]);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const { data: posts } = useAxios({
+  const { data: posts, loading: loadingPosts } = useAxios({
     url: "/posts?_start=0&_limit=10",
   });
 
-  const { data: users } = useAxios({
+  const { data: users, loading: loadingUsers } = useAxios({
     url: "/users",
   });
 
@@ -39,7 +45,7 @@ const Posts = () => {
             (item) =>
               item.title.toLowerCase().includes(search.toLowerCase()) ||
               item.body.toLowerCase().includes(search.toLowerCase()) ||
-              item.username.toLowerCase().includes(search.toLowerCase())
+              item.user.username.toLowerCase().includes(search.toLowerCase())
           )
         );
       }
@@ -51,7 +57,7 @@ const Posts = () => {
   }, [search, posts, users]);
 
   return (
-    <div className="container--accent posts">
+    <div className="posts">
       <Box
         component="form"
         sx={{
@@ -62,6 +68,7 @@ const Posts = () => {
         autoComplete="off"
       >
         <TextField
+          type="search"
           id="outlined-basic"
           label="Search posts"
           variant="outlined"
@@ -69,26 +76,59 @@ const Posts = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </Box>
-      {map(search ? computedData : getCombinedData(posts, users), (d) => {
-        return (
-          <div key={d.id} className="post">
-            <div className="content">
-              <h3>{d.title}</h3>
-              <div>{d.body}</div>
-            </div>
-            <div
-              className="username"
-              onClick={() => {
-                navigate(`/author/${d.userId}`);
-              }}
-            >
-              -{d.username}
-            </div>
-          </div>
-        );
-      })}
+
+      {loadingPosts || loadingUsers ? (
+        <CircularProgress />
+      ) : (
+        <>
+          {map(search ? computedData : getCombinedData(posts, users), (d) => {
+            return (
+              <div key={d.id} className="post">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    flexGrow: 1,
+                    textTransform: "uppercase",
+                    mb: 1,
+                  }}
+                >
+                  {d.title}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  component="div"
+                  sx={{ flexGrow: 1, mb: 1 }}
+                >
+                  {d.body}
+                </Typography>
+                <div className="username">
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ flexGrow: 1 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPost(d);
+                    }}
+                  >
+                    -{d.user?.username}
+                  </Typography>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+
+      <Modal
+        open={selectedPost ? true : false}
+        onClose={() => setSelectedPost(null)}
+      >
+        <Author user={selectedPost?.user} />
+      </Modal>
     </div>
   );
 };
 
-export default Posts;
+export default requireAuth(Posts);

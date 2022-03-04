@@ -37,14 +37,13 @@ const axiosReducer = (state, action) => {
   }
 };
 
-const useAxios = (params) => {
+const useAxios = ({ runOnMount = true, ...rest }) => {
   const [state, dispatch] = useReducer(axiosReducer, INITIAL_STATE);
 
   const callAxios = async () => {
     dispatch({ type: "AXIOS_REQUEST_START" });
     try {
-      console.log(params);
-      const response = await axios(params);
+      const response = await axios(rest);
       dispatch({ type: "AXIOS_REQUEST_SUCCESS", payload: response.data });
     } catch (err) {
       dispatch({
@@ -56,9 +55,8 @@ const useAxios = (params) => {
   };
 
   useEffect(() => {
-    if (!params.url && !params.data) return null;
-    callAxios();
-  }, [params.url]);
+    if (runOnMount) callAxios();
+  }, []);
 
   return { ...state, callAxios };
 };
